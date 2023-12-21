@@ -6,7 +6,7 @@ on:
 
 env:
   IMAGE_TAG: cicd-study:latest
-  ECR_URL: 491092715218.dkr.ecr.us-east-2.amazonaws.com/bom-cicd-study-private
+  ECR_URL: 491092715218.dkr.ecr.ap-northeast-2.amazonaws.com/bom-cicd-study
   ROLE_ARN: arn:aws:iam::491092715218:role/cicd-study-oicd-role
   AWS_REGION: ap-northeast-2
 
