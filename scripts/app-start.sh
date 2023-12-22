@@ -4,7 +4,7 @@ CONTAINER_ENV_PATH="/home/ubuntu/env/.env"
 SERVICE_NAME=cicd
 
 sudo aws ecr get-login-password --region ap-northeast-2 | sudo docker login --username AWS --password-stdin 491092715218.dkr.ecr.ap-northeast-2.amazonaws.com
-sudo docker image prune
+sudo docker image prune -f
 sudo docker pull ${IMAGE_NAME}
 
 # Docker Compose YAML을 새로운 도커 버전으로 작성해서 저장
