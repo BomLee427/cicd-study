@@ -60,7 +60,7 @@ jobs:
 
       # Docker 이미지 이름을 image.txt 파일에 쓰기
       - name: Write Docker image name to file
-        run: echo "${{ env.ECR_URL }}:${{ secrets.MAJOR }}.${{ secrets.MINOR }}" > image.txt
+        run: echo "${{ env.ECR_URL }}:latest" > image.txt
 
       # CodeDeploy 배포를 위한 관련 파일 업로드용 디렉토리 생성
       - name: Create zip file for AWS CodeDeploy
