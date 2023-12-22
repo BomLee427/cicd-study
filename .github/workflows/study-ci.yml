@@ -10,7 +10,7 @@ env:
   AWS_REGION: ap-northeast-2
   AWS_S3_BUCKET_NAME: bom-cicdstudy-bucket # S3 버킷 이름 # ${{ secrets.AWS_S3_BUCKET_NAME }}
   AWS_CODE_DEPLOY_NAME: bom-cicd-study # CodeDeploy 애플리케이션 이름
-  AWS_CODE_DEPLOY_GROUP: cicd-study-codedeploy-group # CodeDeploy 배포 그룹 이름
+  AWS_CODE_DEPLOY_GROUP: bom-codedeploy-group # CodeDeploy 배포 그룹 이름
 
 
 jobs:
