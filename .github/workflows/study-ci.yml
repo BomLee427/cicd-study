@@ -5,7 +5,7 @@ on:
     branches: [ "study" ]
 
 env:
-  ECR_URL: 491092715218.dkr.ecr.ap-northeast-2.amazonaws.com/cicd-study
+  ECR_URL: 491092715218.dkr.ecr.ap-northeast-2.amazonaws.com/bom-cicd-study
   ROLE_ARN: arn:aws:iam::491092715218:role/cicd-study-oicd-role
   AWS_REGION: ap-northeast-2
   AWS_S3_BUCKET_NAME: bom-cicdstudy-bucket # S3 버킷 이름 # ${{ secrets.AWS_S3_BUCKET_NAME }}
