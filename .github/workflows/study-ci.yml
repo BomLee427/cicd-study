@@ -76,12 +76,12 @@ jobs:
             --source ${{ env.AWS_CODE_DEPLOY_NAME }}
 
       # AWS EC2 CodeDeploy 배포 요청
-      - name: Delpoy to AWS EC2
+      - name: Deploy to AWS EC2
         run: |
           aws deploy create-deployment \
             --application-name ${{ env.AWS_CODE_DEPLOY_NAME }} \
-            --deployment-config-name CodeDeployDefault.OneAtATime \
-            --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} \
-            --description "Deploy cicd-study" \
             --s3-location bucket=$AWS_S3_BUCKET_NAME,key=codedeploy/$GITHUB_SHA.zip,bundleType=zip
+            --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --description "Deploy cicd-study" \
 
