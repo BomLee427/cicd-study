@@ -80,8 +80,8 @@ jobs:
         run: |
           aws deploy create-deployment \
             --application-name ${{ env.AWS_CODE_DEPLOY_NAME }} \
-            --s3-location bucket=$AWS_S3_BUCKET_NAME,key=codedeploy/$GITHUB_SHA.zip,bundleType=zip
+            --s3-location bucket=$AWS_S3_BUCKET_NAME,key=codedeploy/$GITHUB_SHA.zip,bundleType=zip \
             --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} \
             --deployment-config-name CodeDeployDefault.OneAtATime \
-            --description "Deploy cicd-study" \
+            --description "Deploy cicd-study"
 
