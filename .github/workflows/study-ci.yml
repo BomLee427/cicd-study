@@ -44,7 +44,7 @@ jobs:
         run: docker build -t ${{ env.ECR_URL }}:latest ./
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-region: ${{ env.AWS_REGION }}
           role-session-name: GitHubActions
