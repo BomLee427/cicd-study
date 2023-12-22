@@ -50,6 +50,10 @@ jobs:
           role-session-name: GitHubActions
           role-to-assume: ${{ env.ROLE_ARN }}
 
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
       - name: Publish Image to ECR
         run: |
           docker push ${{ env.ECR_URL }}:latest
