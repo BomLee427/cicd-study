@@ -50,10 +50,6 @@ jobs:
           role-session-name: GitHubActions
           role-to-assume: ${{ env.ROLE_ARN }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
       - name: Publish Image to ECR
         run: |
           docker push ${{ env.ECR_URL }}:latest
@@ -65,14 +61,6 @@ jobs:
       # CodeDeploy 배포를 위한 관련 파일 업로드용 디렉토리 생성
       - name: Create zip file for AWS CodeDeploy
         run: mkdir ${{ env.AWS_CODE_DEPLOY_NAME }} && cp -r appspec.yml image.txt scripts ${{ env.AWS_CODE_DEPLOY_NAME }}
-
-      # AWS 설정
-      - name: AWS Configure
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: ap-northeast-2
 
       # AWS S3로 배포 관련 파일 압축 및 업로드
       - name: Upload to AWS S3
