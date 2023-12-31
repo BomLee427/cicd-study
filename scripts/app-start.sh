@@ -6,6 +6,8 @@ sudo aws ecr get-login-password --region ap-northeast-2 | sudo docker login --us
 sudo docker image prune -f
 sudo docker pull ${IMAGE_NAME}
 
+ls
+
 # 새로운 도커 컨테이너 실행
 echo "IMAGE_NAME: $IMAGE_NAME 도커 실행"
 sudo docker compose up -d $SERVICE_NAME
