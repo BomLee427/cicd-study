@@ -58,15 +58,19 @@ jobs:
       - name: Publish Image to ECR
         run: docker push ${{ env.NEW_IMAGE_NAME }}
 
-#      - name: Create appspec.yml for CodeDeploy
-#        run: echo "${{ secrets.AWS_CODEDEPLOY_APPSPEC }}" > appspec.yml
-#
-#      - name: Create scripts for CodeDeploy
-#        run: |
-#          mkdir scripts
-#          cd scripts
-#          echo "${{ secrets.AWS_HOOKS_APPSTART }}" > ApplicationStart.sh
-#          echo "${{ secrets.AWS_HOOKS_APPSTOP }}" > ApplicationStop.sh
+      - name: Create appspec.yml for CodeDeploy
+        run: |
+          export ESCAPED_REPLACE=$(printf '%s\n' "${{ secrets.AWS_CODEDEPLOY_APPSPEC }}" | sed -e 's/[\/&]|[\$&]|[\"&]/\\&/g')
+          echo "$ESCAPED_REPLACE" > appspec.yml
+
+      - name: Create scripts for CodeDeploy
+        run: |
+          mkdir scripts
+          cd scripts
+          export ESCAPED_REPLACE=$(printf '%s\n' "${{ secrets.AWS_HOOKS_APPSTART }}" | sed -e 's/[\/&]|[\$&]|[\"&]/\\&/g')
+          echo "$ESCAPED_REPLACE" > ApplicationStart.sh
+          export ESCAPED_REPLACE=$(printf '%s\n' "${{ secrets.AWS_HOOKS_APPSTOP }}" | sed -e 's/[\/&]|[\$&]|[\"&]/\\&/g')
+          echo "$ESCAPED_REPLACE" > ApplicationStop.sh
 
       # Docker compose, ApplicationStart.sh에 새 이미지명 쓰기
       - name: Image name replace
