@@ -65,8 +65,8 @@ jobs:
       # Docker compose에 새 이미지명 쓰기
       - name: Docker compose image name replace
         run: |
-          ESCAPED_REPLACE=$(printf '%s\n' "${{ env.NEW_IMAGE_NAME }}" | sed -e 's/[\/&]/\\&/g')
-          sed -i 's/_IMAGE_NAME_/$ESCAPED_REPLACE/g' docker-compose.yaml
+          ESCAPED_REPLACE=$(printf '%s\n' "${{ env.NEW_IMAGE_NAME }}" | sed -e 's/[\/&]/\\&/g') \
+          sed -i "s/_IMAGE_NAME_/\$ESCAPED_REPLACE/g" docker-compose.yaml
 
       # CodeDeploy 배포를 위한 관련 파일 업로드용 디렉토리 생성
       - name: Create zip file for AWS CodeDeploy
