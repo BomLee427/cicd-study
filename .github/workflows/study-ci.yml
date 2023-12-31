@@ -5,12 +5,12 @@ on:
     branches: [ "study" ]
 
 env:
-  ECR_URL: 491092715218.dkr.ecr.ap-northeast-2.amazonaws.com/bom-cicd-study
-  ROLE_ARN: arn:aws:iam::491092715218:role/cicd-study-oicd-role
-  AWS_REGION: ap-northeast-2
-  AWS_S3_BUCKET_NAME: bom-cicdstudy-bucket # S3 버킷 이름 # ${{ secrets.AWS_S3_BUCKET_NAME }}
-  AWS_CODE_DEPLOY_NAME: bom-cicd-study # CodeDeploy 애플리케이션 이름
-  AWS_CODE_DEPLOY_GROUP: cicd-study-codedeploy-group # CodeDeploy 배포 그룹 이름
+  AWS_ECR_URI: ${{ secrets.AWS_ECR_URI }}
+  AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }} # S3 버킷 이름
+  AWS_CODE_DEPLOY_NAME: ${{ secrets.AWS_CODE_DEPLOY_NAME }} # CodeDeploy 애플리케이션 이름
+  AWS_CODE_DEPLOY_GROUP: ${{ secrets.AWS_CODE_DEPLOY_GROUP }} # CodeDeploy 배포 그룹 이름
 
 
 jobs:
@@ -41,14 +41,14 @@ jobs:
           arguments: build
 
       - name: Docker build
-        run: docker build -t ${{ env.ECR_URL }}:latest ./
+        run: docker build -t ${{ env.AWS_ECR_URI }}:latest ./
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-region: ${{ env.AWS_REGION }}
           role-session-name: GitHubActions
-          role-to-assume: ${{ env.ROLE_ARN }}
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -56,11 +56,11 @@ jobs:
 
       - name: Publish Image to ECR
         run: |
-          docker push ${{ env.ECR_URL }}:latest
+          docker push ${{ env.AWS_ECR_URI }}:latest
 
       # Docker 이미지 이름을 image.txt 파일에 쓰기
       - name: Write Docker image name to file
-        run: echo "${{ env.ECR_URL }}:latest" > image.txt
+        run: echo "${{ env.AWS_ECR_URI }}:latest" > image.txt
 
       # CodeDeploy 배포를 위한 관련 파일 업로드용 디렉토리 생성
       - name: Create zip file for AWS CodeDeploy
