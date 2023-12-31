@@ -11,6 +11,7 @@ env:
   AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }} # S3 버킷 이름
   AWS_CODE_DEPLOY_NAME: ${{ secrets.AWS_CODE_DEPLOY_NAME }} # CodeDeploy 애플리케이션 이름
   AWS_CODE_DEPLOY_GROUP: ${{ secrets.AWS_CODE_DEPLOY_GROUP }} # CodeDeploy 배포 그룹 이름
+  NEW_IMAGE_NAME: ${{ env.AWS_ECR_URI }}:latest
 
 
 jobs:
@@ -40,12 +41,8 @@ jobs:
         with:
           arguments: build
 
-      - name: Set new image name
-        run: |
-          new_image_name=`echo "${{ env.AWS_ECR_URI }}:latest"`
-
       - name: Docker build
-        run: docker build -t $new_image_name ./
+        run: docker build -t ${{ env.NEW_IMAGE_NAME }} ./
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
@@ -59,15 +56,15 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Publish Image to ECR
-        run: docker push $new_image_name
+        run: docker push ${{ env.NEW_IMAGE_NAME }}
 
       # Docker 이미지 이름을 image.txt 파일에 쓰기
       - name: Write Docker image name to file
-        run: echo "$new_image_name" > image.txt
+        run: echo "${{ env.NEW_IMAGE_NAME }}" > image.txt
 
       # Docker compose에 새 이미지명 쓰기
       - name: Docker compose sed
-        run: sed -i 's/_IMAGE_NAME_/$new_image_name/g' docker-compose.yaml
+        run: sed -i 's/_IMAGE_NAME_/${{ env.NEW_IMAGE_NAME }}/g' docker-compose.yaml
 
       # CodeDeploy 배포를 위한 관련 파일 업로드용 디렉토리 생성
       - name: Create zip file for AWS CodeDeploy
