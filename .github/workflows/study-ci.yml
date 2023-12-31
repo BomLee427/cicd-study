@@ -11,7 +11,7 @@ env:
   AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }} # S3 버킷 이름
   AWS_CODE_DEPLOY_NAME: ${{ secrets.AWS_CODE_DEPLOY_NAME }} # CodeDeploy 애플리케이션 이름
   AWS_CODE_DEPLOY_GROUP: ${{ secrets.AWS_CODE_DEPLOY_GROUP }} # CodeDeploy 배포 그룹 이름
-  NEW_IMAGE_NAME: ${{ env.AWS_ECR_URI }}:latest
+  NEW_IMAGE_NAME: ${{ secrets.AWS_ECR_URI }}:latest
 
 
 jobs:
