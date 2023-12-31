@@ -7,8 +7,8 @@ sudo docker image prune -f
 sudo docker pull ${IMAGE_NAME}
 
 echo "왜없을까요..."
-ls
 cd /home/ubuntu/deploy
+ls
 
 # 새로운 도커 컨테이너 실행
 echo "IMAGE_NAME: $IMAGE_NAME 도커 실행"
