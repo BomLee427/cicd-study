@@ -6,11 +6,11 @@ on:
 
 env:
   AWS_ECR_URI: ${{ secrets.AWS_ECR_URI }}
-  AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+  AWS_OIDC_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
   AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }} # S3 버킷 이름
-  AWS_CODE_DEPLOY_NAME: ${{ secrets.AWS_CODE_DEPLOY_NAME }} # CodeDeploy 애플리케이션 이름
-  AWS_CODE_DEPLOY_GROUP: ${{ secrets.AWS_CODE_DEPLOY_GROUP }} # CodeDeploy 배포 그룹 이름
+  AWS_CODEDEPLOY_NAME: ${{ secrets.AWS_CODEDEPLOY_NAME }} # CodeDeploy 애플리케이션 이름
+  AWS_CODEDEPLOY_GROUP: ${{ secrets.AWS_CODEDEPLOY_GROUP }} # CodeDeploy 배포 그룹 이름
   NEW_IMAGE_NAME: ${{ secrets.AWS_ECR_URI }}:latest
 
 
@@ -58,9 +58,15 @@ jobs:
       - name: Publish Image to ECR
         run: docker push ${{ env.NEW_IMAGE_NAME }}
 
-      # Docker 이미지 이름을 image.txt 파일에 쓰기
-#      - name: Write Docker image name to file
-#        run: echo "${{ env.NEW_IMAGE_NAME }}" > image.txt
+      - name: Create appspec.yml for CodeDeploy
+        run: echo ${{ secrets.AWS_CODEDEPLOY_APPSPEC }} > appspec.yml
+
+      - name: Create scripts for CodeDeploy
+        run: |
+          mkdir scripts
+          cd scripts
+          echo ${{ secrets.AWS_HOOKS_APPSTART }} > ApplicationStart.sh
+          echo ${{ secrets.AWS_HOOKS_APPSTOP }} > ApplicationStop.sh
 
       # Docker compose, ApplicationStart.sh에 새 이미지명 쓰기
       - name: Image name replace
@@ -71,24 +77,24 @@ jobs:
 
       # CodeDeploy 배포를 위한 관련 파일 업로드용 디렉토리 생성
       - name: Create zip file for AWS CodeDeploy
-        run: mkdir ${{ env.AWS_CODE_DEPLOY_NAME }} && cp -r appspec.yml docker-compose.yaml scripts ${{ env.AWS_CODE_DEPLOY_NAME }}
+        run: mkdir ${{ env.AWS_CODEDEPLOY_NAME }} && cp -r appspec.yml docker-compose.yaml scripts ${{ env.AWS_CODEDEPLOY_NAME }}
 
       # AWS S3로 배포 관련 파일 압축 및 업로드
       - name: Upload to AWS S3
         run: |
           aws deploy push \
-            --application-name ${{ env.AWS_CODE_DEPLOY_NAME }} \
+            --application-name ${{ env.AWS_CODEDEPLOY_NAME }} \
             --s3-location s3://${{ env.AWS_S3_BUCKET_NAME }}/codedeploy/$GITHUB_SHA.zip \
             --ignore-hidden-files \
-            --source ${{ env.AWS_CODE_DEPLOY_NAME }}
+            --source ${{ env.AWS_CODEDEPLOY_NAME }}
 
       # AWS EC2 CodeDeploy 배포 요청
       - name: Deploy to AWS EC2
         run: |
           aws deploy create-deployment \
-            --application-name ${{ env.AWS_CODE_DEPLOY_NAME }} \
+            --application-name ${{ env.AWS_CODEDEPLOY_NAME }} \
             --s3-location bucket=$AWS_S3_BUCKET_NAME,key=codedeploy/$GITHUB_SHA.zip,bundleType=zip \
-            --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} \
+            --deployment-group-name ${{ env.AWS_CODEDEPLOY_GROUP }} \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --description "Deploy cicd-study"
 
