@@ -101,4 +101,3 @@ jobs:
             --deployment-group-name ${{ env.AWS_CODEDEPLOY_GROUP }} \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --description "Deploy cicd-study"
-
