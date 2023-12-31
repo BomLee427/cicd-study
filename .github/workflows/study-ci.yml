@@ -26,6 +26,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Setup submodule
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.SUBMODULES_ACCESS_TOKEN }}
+          submodules: recursive
+
       - name: set JDK
         uses: actions/setup-java@v3
         with:
@@ -58,16 +64,9 @@ jobs:
       - name: Publish Image to ECR
         run: docker push ${{ env.NEW_IMAGE_NAME }}
 
-      - name: Create appspec.yml for CodeDeploy
+      - name: Copy files for CodeDeploy from submodule
         run: |
-          echo '${{ secrets.AWS_CODEDEPLOY_APPSPEC }}' > appspec.yml
-
-      - name: Create scripts for CodeDeploy
-        run: |
-          mkdir scripts
-          cd scripts
-          echo '${{ secrets.AWS_HOOKS_APPSTART }}' > ApplicationStart.sh
-          echo '${{ secrets.AWS_HOOKS_APPSTOP }}' > ApplicationStop.sh
+          cp -r submodule .
 
       # Docker compose, ApplicationStart.sh에 새 이미지명 쓰기
       - name: Image name replace
