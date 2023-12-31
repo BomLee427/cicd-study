@@ -63,7 +63,7 @@ jobs:
         run: echo "${{ env.NEW_IMAGE_NAME }}" > image.txt
 
       # Docker compose에 새 이미지명 쓰기
-      - name: Docker compose sed
+      - name: Docker compose image name replace
         run: |
           ESCAPED_REPLACE=$(printf '%s\n' "${{ env.NEW_IMAGE_NAME }}" | sed -e 's/[\/&]/\\&/g')
           sed -i 's/_IMAGE_NAME_/$ESCAPED_REPLACE/g' docker-compose.yaml
