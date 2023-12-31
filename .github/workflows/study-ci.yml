@@ -60,22 +60,22 @@ jobs:
 
       - name: Create appspec.yml for CodeDeploy
         run: |
-          export ESCAPED_REPLACE=$(printf '%s\n' "${{ secrets.AWS_CODEDEPLOY_APPSPEC }}" | sed -e 's/[\/&]|[\$&]|[\"&]/\\&/g')
-          echo "$ESCAPED_REPLACE" > appspec.yml
+          export ESCAPED_REPLACE=$(echo "${{ secrets.AWS_CODEDEPLOY_APPSPEC }}" | sed -e 's/\/|\$|\"/\\&/g')
+          echo -e "$ESCAPED_REPLACE" > appspec.yml
 
       - name: Create scripts for CodeDeploy
         run: |
           mkdir scripts
           cd scripts
-          export ESCAPED_REPLACE=$(printf '%s\n' "${{ secrets.AWS_HOOKS_APPSTART }}" | sed -e 's/[\/&]|[\$&]|[\"&]/\\&/g')
-          echo "$ESCAPED_REPLACE" > ApplicationStart.sh
-          export ESCAPED_REPLACE=$(printf '%s\n' "${{ secrets.AWS_HOOKS_APPSTOP }}" | sed -e 's/[\/&]|[\$&]|[\"&]/\\&/g')
-          echo "$ESCAPED_REPLACE" > ApplicationStop.sh
+          export ESCAPED_REPLACE=$(echo "${{ secrets.AWS_HOOKS_APPSTART }}" | sed -e 's/\/|\$|\"/\\&/g')
+          echo -e "$ESCAPED_REPLACE" > ApplicationStart.sh
+          export ESCAPED_REPLACE=$(echo "${{ secrets.AWS_HOOKS_APPSTOP }}" | sed -e 's/\/|\$|\"/\\&/g')
+          echo -e "$ESCAPED_REPLACE" > ApplicationStop.sh
 
       # Docker compose, ApplicationStart.sh에 새 이미지명 쓰기
       - name: Image name replace
         run: |
-          export ESCAPED_REPLACE=$(printf '%s\n' "${{ env.NEW_IMAGE_NAME }}" | sed -e 's/[\/&]/\\&/g')
+          export ESCAPED_REPLACE=$(echo "${{ env.NEW_IMAGE_NAME }}" | sed -e 's/\/|\$|\"/\\&/g')
           sed -i 's/_IMAGE_NAME_/'$ESCAPED_REPLACE'/g' docker-compose.yaml
           sed -i 's/_IMAGE_NAME_/'$ESCAPED_REPLACE'/g' scripts/ApplicationStart.sh
 
