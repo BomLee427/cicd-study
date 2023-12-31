@@ -6,7 +6,7 @@ on:
 
 env:
   AWS_ECR_URI: ${{ secrets.AWS_ECR_URI }}
-  AWS_OIDC_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+  AWS_OIDC_ROLE_ARN: ${{ secrets.AWS_OIDC_ROLE_ARN }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
   AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }} # S3 버킷 이름
   AWS_CODEDEPLOY_NAME: ${{ secrets.AWS_CODEDEPLOY_NAME }} # CodeDeploy 애플리케이션 이름
@@ -49,7 +49,7 @@ jobs:
         with:
           aws-region: ${{ env.AWS_REGION }}
           role-session-name: GitHubActions
-          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          role-to-assume: ${{ env.AWS_OIDC_ROLE_ARN }}
 
       - name: Login to Amazon ECR
         id: login-ecr
