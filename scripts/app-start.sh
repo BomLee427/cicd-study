@@ -6,6 +6,7 @@ sudo aws ecr get-login-password --region ap-northeast-2 | sudo docker login --us
 sudo docker image prune -f
 sudo docker pull ${IMAGE_NAME}
 
+echo "왜없을까요..."
 ls
 
 # 새로운 도커 컨테이너 실행
