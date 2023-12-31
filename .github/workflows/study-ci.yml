@@ -58,15 +58,15 @@ jobs:
       - name: Publish Image to ECR
         run: docker push ${{ env.NEW_IMAGE_NAME }}
 
-      - name: Create appspec.yml for CodeDeploy
-        run: echo "${{ secrets.AWS_CODEDEPLOY_APPSPEC }}" > appspec.yml
-
-      - name: Create scripts for CodeDeploy
-        run: |
-          mkdir scripts
-          cd scripts
-          echo "${{ secrets.AWS_HOOKS_APPSTART }}" > ApplicationStart.sh
-          echo "${{ secrets.AWS_HOOKS_APPSTOP }}" > ApplicationStop.sh
+#      - name: Create appspec.yml for CodeDeploy
+#        run: echo "${{ secrets.AWS_CODEDEPLOY_APPSPEC }}" > appspec.yml
+#
+#      - name: Create scripts for CodeDeploy
+#        run: |
+#          mkdir scripts
+#          cd scripts
+#          echo "${{ secrets.AWS_HOOKS_APPSTART }}" > ApplicationStart.sh
+#          echo "${{ secrets.AWS_HOOKS_APPSTOP }}" > ApplicationStop.sh
 
       # Docker compose, ApplicationStart.sh에 새 이미지명 쓰기
       - name: Image name replace

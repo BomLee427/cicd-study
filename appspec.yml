@@ -1,0 +1,25 @@
+# CodeDeploy용 appspec.yml
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/deploy/
+file_exists_behavior: OVERWRITE
+
+permissions:
+  - object: /home/ubuntu/deploy/
+    pattern: "**"
+    owner: root
+    group: root
+    mode: 777
+
+hooks:
+  ApplicationStop:
+    - location: scripts/ApplicationStop.sh
+      timeout: 60
+      runas: root
+
+  ApplicationStart:
+    - location: scripts/ApplicationStart.sh
+      timeout: 60
+      runas: root
