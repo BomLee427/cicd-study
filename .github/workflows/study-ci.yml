@@ -59,14 +59,18 @@ jobs:
         run: docker push ${{ env.NEW_IMAGE_NAME }}
 
       - name: Create appspec.yml for CodeDeploy
-        run: cat "${{ secrets.AWS_CODEDEPLOY_APPSPEC }}" > appspec.yml
+        run: |
+          touch appspec.yml
+          echo "${{ secrets.AWS_CODEDEPLOY_APPSPEC }}" > appspec.yml
 
       - name: Create scripts for CodeDeploy
         run: |
           mkdir scripts
           cd scripts
-          cat "${{ secrets.AWS_HOOKS_APPSTART }}" > ApplicationStart.sh
-          cat "${{ secrets.AWS_HOOKS_APPSTOP }}" > ApplicationStop.sh
+          touch ApplicationStart.sh
+          echo "${{ secrets.AWS_HOOKS_APPSTART }}" > ApplicationStart.sh
+          touch ApplicationStop.sh
+          echo "${{ secrets.AWS_HOOKS_APPSTOP }}" > ApplicationStop.sh
 
       # Docker compose, ApplicationStart.sh에 새 이미지명 쓰기
       - name: Image name replace
