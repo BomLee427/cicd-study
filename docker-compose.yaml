@@ -3,6 +3,6 @@ version: '3.8'
 services:
   cicd:
     container_name: cicd-study
-    image: IMAGE_NAME
+    image: _IMAGE_NAME_
     ports:
       - 8080:8080
