@@ -41,7 +41,9 @@ jobs:
           arguments: build
 
       - name: Set new image name
-        run: new_image_name=${{ env.AWS_ECR_URI }}:latest
+        run: |
+          new_image_name=${{ env.AWS_ECR_URI }}:latest \
+          echo $new_image_name
 
       - name: Docker build
         run: docker build -t $new_image_name ./
