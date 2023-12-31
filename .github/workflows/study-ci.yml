@@ -64,7 +64,7 @@ jobs:
 
       # Docker compose에 새 이미지명 쓰기
       - name: Docker compose sed
-        run: sed -i 's/_IMAGE_NAME_/${{ env.AWS_ECR_URI }}:latest/g' docker-compose.yaml
+        run: sed -i 's/_IMAGE_NAME_/test/g' docker-compose.yaml
 
       # CodeDeploy 배포를 위한 관련 파일 업로드용 디렉토리 생성
       - name: Create zip file for AWS CodeDeploy
