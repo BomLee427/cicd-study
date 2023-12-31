@@ -66,7 +66,7 @@ jobs:
 
       - name: Copy files for CodeDeploy from submodule
         run: |
-          cp -r submodule .
+          cp -r submodule/* .
 
       # Docker compose, ApplicationStart.sh에 새 이미지명 쓰기
       - name: Image name replace
