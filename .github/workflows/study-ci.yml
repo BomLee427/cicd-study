@@ -59,18 +59,19 @@ jobs:
         run: docker push ${{ env.NEW_IMAGE_NAME }}
 
       # Docker 이미지 이름을 image.txt 파일에 쓰기
-      - name: Write Docker image name to file
-        run: echo "${{ env.NEW_IMAGE_NAME }}" > image.txt
+#      - name: Write Docker image name to file
+#        run: echo "${{ env.NEW_IMAGE_NAME }}" > image.txt
 
-      # Docker compose에 새 이미지명 쓰기
-      - name: Docker compose image name replace
+      # Docker compose, ApplicationStart.sh에 새 이미지명 쓰기
+      - name: Image name replace
         run: |
           export ESCAPED_REPLACE=$(printf '%s\n' "${{ env.NEW_IMAGE_NAME }}" | sed -e 's/[\/&]/\\&/g')
           sed -i 's/_IMAGE_NAME_/'$ESCAPED_REPLACE'/g' docker-compose.yaml
+          sed -i 's/_IMAGE_NAME_/'$ESCAPED_REPLACE'/g' scripts/ApplicationStart.sh
 
       # CodeDeploy 배포를 위한 관련 파일 업로드용 디렉토리 생성
       - name: Create zip file for AWS CodeDeploy
-        run: mkdir ${{ env.AWS_CODE_DEPLOY_NAME }} && cp -r appspec.yml image.txt docker-compose.yaml scripts ${{ env.AWS_CODE_DEPLOY_NAME }}
+        run: mkdir ${{ env.AWS_CODE_DEPLOY_NAME }} && cp -r appspec.yml docker-compose.yaml scripts ${{ env.AWS_CODE_DEPLOY_NAME }}
 
       # AWS S3로 배포 관련 파일 압축 및 업로드
       - name: Upload to AWS S3
