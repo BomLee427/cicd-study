@@ -1,1 +1,32 @@
 
+name: env test
+
+on: 
+  push:
+    branches: [main]
+
+# env:
+#   AWS_ECR_URI: ${{ secrets.AWS_ECR_URI }}
+#   AWS_OIDC_ROLE_ARN: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+#   AWS_REGION: ${{ secrets.AWS_REGION }}
+#   AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }} # S3 버킷 이름
+#   AWS_CODEDEPLOY_NAME: ${{ secrets.AWS_CODEDEPLOY_NAME }} # CodeDeploy 애플리케이션 이름
+#   AWS_CODEDEPLOY_GROUP: ${{ secrets.AWS_CODEDEPLOY_GROUP }} # CodeDeploy 배포 그룹 이름
+#   NEW_IMAGE_NAME: ${{ secrets.AWS_ECR_URI }}:latest
+
+jobs:
+  secrets:
+    environment: test
+    runs-on: ubuntu-lastest
+
+    env:
+      ENV_TEST: ${{ secrets.SECRET_TEST }}
+      AWS_ECR_URI: ${{ secrets.AWS_ECR_URI }}
+
+    steps:
+      - name: Access env secret
+        run: |
+          echo "env secret: ${{ ENV_TEST }}"
+      - name: Access common secret
+        run: |
+          echo "common secret: ${{ AWS_ECR_URI }}"
