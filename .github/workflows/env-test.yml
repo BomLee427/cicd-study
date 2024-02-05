@@ -3,7 +3,7 @@ name: env test
 
 on: 
   push:
-    branches: [main]
+    branches: [ "main" ]
 
 # env:
 #   AWS_ECR_URI: ${{ secrets.AWS_ECR_URI }}
