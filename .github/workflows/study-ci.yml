@@ -2,7 +2,7 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "test" ]
 
 env:
   AWS_ECR_URI: ${{ secrets.AWS_ECR_URI }}
