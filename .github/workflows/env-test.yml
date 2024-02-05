@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: Access env secret
         run: |
-          echo "env secret: ${{ env.ENV_TEST }}"
+          echo "env secret: ${{ secrets.SECRET_TEST }}"
       - name: Access common secret
         run: |
           echo "common secret: ${{ env.AWS_ECR_URI }}"
